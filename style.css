@@ -4,6 +4,13 @@
     box-sizing: border-box;
 }
 
+body {
+    display: flex;
+    justify-content: center;
+}
+
 main {
+    width: 80vw;
+    height: 100vh;
     background-color: #dda15e;
 }
