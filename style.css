@@ -7,10 +7,16 @@
 body {
     display: flex;
     justify-content: center;
+    background-color: #dda15e;
 }
 
 main {
     width: 80vw;
     height: 100vh;
-    background-color: #dda15e;
+}
+
+nav {
+    width: 100vw;
+    height: 10vh;
+    background-color: #bc6c25;
 }
