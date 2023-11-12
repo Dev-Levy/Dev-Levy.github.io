@@ -6,8 +6,8 @@
 
 body {
     display: flex;
-    justify-content: center;
-    background-color: #dda15e;
+    flex-direction: column;
+    align-items: center;
 }
 
 main {
@@ -16,7 +16,9 @@ main {
 }
 
 nav {
+    display: flex;
+    align-items: space-evenly;
     width: 100vw;
-    height: 10vh;
+    height: 4vh;
     background-color: #bc6c25;
 }
