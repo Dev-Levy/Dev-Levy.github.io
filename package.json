@@ -1,0 +1,15 @@
+{
+  "name": "dev-levy.github.io",
+  "version": "1.0.0",
+  "description": "",
+  "main": "code-behind.js",
+  "scripts": {
+    "run": "vite",
+    "build": "vite build"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "vite": "^5.0.12"
+  }
+}
