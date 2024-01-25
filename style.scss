@@ -134,6 +134,16 @@ table {
 
 /*#endregion*/
 
+
+/*#region variables*/
+$primary-color: #fff;
+$secondary-color: #000;
+
+$font-stack: 'Fira Sans', sans-serif;
+
+/*#endregion*/
+
+
 body {
     background-image: url("city-blurry.jpg");
     background-size: cover;
@@ -148,7 +158,7 @@ body {
     width: 100vw;
     height: 100vh;
 
-    font-family: 'Fira Sans', sans-serif;
+    font-family: $font-stack;
     position: relative;
 
     #overlay {
@@ -160,12 +170,14 @@ body {
         background-color: #ffd4b02d;
         backdrop-filter: blur(15px);
     }
+
+    color: $primary-color;
 }
 
 main {
     width: 80%;
     height: 100%;
-    background-color: #fff;
+    //background-color: #fff;
 }
 
 h1 {
