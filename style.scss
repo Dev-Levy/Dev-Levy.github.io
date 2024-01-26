@@ -228,3 +228,10 @@ main {
         }
     }
 }
+
+
+@media only screen and (max-width: 425px) {
+    #timer {
+        flex-direction: column;
+    }
+}
