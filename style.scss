@@ -177,12 +177,22 @@ body {
 main {
     width: 80%;
     height: 100%;
-    //background-color: #fff;
-}
 
-h1 {
-    font-size: 3em;
-    font-weight: bold;
+    h1 {
+        font-size: 5em;
+        font-weight: bold;
+        padding: 1em 0 0.2em;
+    }
 
-    padding: 1em;
+    p {
+        font-size: 1.5em;
+        padding: 2em 0;
+        line-height: 1.5em;
+    }
+
+    #timer {
+        font-size: 2em;
+        font-weight: bold;
+        padding: 1em 0 0.2em;
+    }
 }

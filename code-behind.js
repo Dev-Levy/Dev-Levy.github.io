@@ -11,7 +11,7 @@ function countdown(endDate) {
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
             console.log(`${years} years, ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`);
-            //document.getElementById("timer").innerHTML = `${years} years, ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
+            document.getElementById("timer").innerHTML = `${years} years, ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
         }
     }, 1000);
 }
