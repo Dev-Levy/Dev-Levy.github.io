@@ -21,5 +21,5 @@ function countdown(endDate) {
 }
 
 
-const endDate = new Date(2026, 0, 15).getTime();
+const endDate = new Date(2026, 2, 28, 12).getTime();
 countdown(endDate);
