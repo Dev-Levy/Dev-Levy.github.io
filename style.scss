@@ -193,6 +193,15 @@ main {
         line-height: 1.5em;
     }
 
+    #countdownheader{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 1em 0.2em;
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+
     #timer {
         font-size: 2em;
         font-weight: bold;
@@ -233,8 +242,8 @@ main {
 }
 
 
-@media only screen and (max-width: 425px) {
-    #timer {
+@media only screen and (max-width: 1000px) {
+    #timer{
         flex-direction: column;
     }
-}
+  }
