@@ -1,46 +1,133 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import FileCard from "./FileCard.svelte";
 
-  const url = "https://localhost:8080/";
+  class AudioFile {
+    filename: string;
+    id: number;
+    upload_date: string;
+    data: number[];
 
-  let items = $state([
-    { id: 1, name: "file1" },
-    { id: 2, name: "file2" },
-    { id: 3, name: "file3" },
-  ]);
+    constructor(data: any) {
+      this.filename = data.filename;
+      this.id = data.id;
+      this.upload_date = data.upload_date;
+      this.data = data.data;
+    }
+  }
+  interface FetchResponse {
+    files: {
+      filename: string;
+      id: number;
+      upload_date: string;
+      data: number[];
+    }[];
+  }
 
-  let file: String = $state("");
-  $inspect("File is updated!", file);
+  let recordings: AudioFile[] = $state([]);
+  const url = "http://localhost:8080";
 
-  function deleteItem(id: number) {
-    console.log("deleted item with id: " + id);
+  function arrayBufferToNumberArray(buffer: ArrayBuffer): number[] {
+    const uint8Array = new Uint8Array(buffer);
+    return Array.from(uint8Array);
+  }
 
-    items = items.filter((item) => item.id !== id);
-    file = "";
+  onMount(async () => {
+    try {
+      const response = await fetch(`${url}/recording`);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const json: FetchResponse = await response.json();
+      console.log("Fetched JSON:", json);
+
+      if (Array.isArray(json.files)) {
+        recordings = json.files.map((item) => new AudioFile(item));
+        console.log("Recordings:", recordings);
+      } else {
+        console.error("Expected an array in json.files but got:", json.files);
+      }
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  });
+
+  let selectedFile: File | null = $state(null);
+  $inspect("selectedFile:", selectedFile);
+
+  async function deleteItem(id: number) {
+    try {
+      const response = await fetch(`${url}/recording/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      recordings = recordings.filter((rec) => rec.id !== id);
+      console.log("File deleted with id: " + id);
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
   }
 
   async function upload() {
-    console.log("uploading file");
+    try {
+      if (!selectedFile) {
+        alert("Please select a file first.");
+        return;
+      }
+
+      const arrayBuf = await selectedFile.arrayBuffer();
+      const dataArray = arrayBufferToNumberArray(arrayBuf);
+
+      const audioFile = new AudioFile({
+        filename: selectedFile.name,
+        id: Date.now(), // Example ID, replace with your logic //NOOOO ID
+        upload_date: new Date().toISOString(),
+        data: dataArray,
+      });
+
+      console.log("AudioFile to upload:", audioFile);
+      const response = await fetch(`${url}/recording`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(audioFile),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      console.log("File uploaded!");
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
   }
 
   function playItem(id: number) {
-    console.log("playing item with id: " + id);
+    console.log("Playing recording with id: " + id);
   }
 </script>
 
 <div class="UploadsZone">
   <div id="list-items">
-    {#each items as item}
+    {#each recordings as recording}
       <FileCard
-        name={item.name}
-        onDelete={() => deleteItem(item.id)}
-        onPlay={() => playItem(item.id)}
+        id={recording.id}
+        name={recording.filename}
+        onDelete={() => deleteItem(recording.id)}
+        onPlay={() => playItem(recording.id)}
       />
     {/each}
   </div>
   <div id="upload">
-    <input type="file" bind:value={file} />
-    <button onclick={upload}>Upload</button>
+    <input type="file" bind:value={selectedFile} />
+    <button onclick={upload} disabled={selectedFile === null}>Upload </button>
   </div>
 </div>
 
