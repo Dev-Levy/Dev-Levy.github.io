@@ -1,20 +1,37 @@
 <script lang="ts">
   import { Play, Trash } from "lucide-svelte";
+  const {
+    deleteCallBack,
+    id,
+    name,
+  }: { deleteCallBack: Function; id: number; name: string } = $props();
 
-  export let id: number;
-  export let name: string;
-  export let onDelete;
-  export let onPlay;
+  const url: string = "http://localhost:8080";
+
+  function playItem() {
+    console.log("Playing recording with id: " + id);
+  }
+
+  async function deleteItem() {
+    try {
+      const response = await fetch(`${url}/recording/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      deleteCallBack(id);
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  }
 </script>
 
 <div id="card">
   <span id="name">{name}</span>
-  <button onclick={onPlay}>
-    <Play />
-  </button>
-  <button onclick={onDelete}>
-    <Trash />
-  </button>
+  <button onclick={playItem}> <Play /> </button>
+  <button onclick={deleteItem}> <Trash /> </button>
 </div>
 
 <style>

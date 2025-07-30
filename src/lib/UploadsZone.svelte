@@ -2,6 +2,12 @@
   import { onMount } from "svelte";
   import FileCard from "./FileCard.svelte";
 
+  const url = "http://localhost:8080";
+  let recordings: AudioFile[] = $state([]);
+
+  let selectedFile: File | null = $state(null);
+  $inspect("selectedFile:", selectedFile);
+
   class AudioFile {
     filename: string;
     id: number;
@@ -22,14 +28,6 @@
       upload_date: string;
       data: number[];
     }[];
-  }
-
-  let recordings: AudioFile[] = $state([]);
-  const url = "http://localhost:8080";
-
-  function arrayBufferToNumberArray(buffer: ArrayBuffer): number[] {
-    const uint8Array = new Uint8Array(buffer);
-    return Array.from(uint8Array);
   }
 
   onMount(async () => {
@@ -54,25 +52,6 @@
     }
   });
 
-  let selectedFile: File | null = $state(null);
-  $inspect("selectedFile:", selectedFile);
-
-  async function deleteItem(id: number) {
-    try {
-      const response = await fetch(`${url}/recording/${id}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      recordings = recordings.filter((rec) => rec.id !== id);
-      console.log("File deleted with id: " + id);
-    } catch (error) {
-      console.error("Fetch error:", error);
-    }
-  }
-
   async function upload() {
     try {
       if (!selectedFile) {
@@ -80,23 +59,14 @@
         return;
       }
 
-      const arrayBuf = await selectedFile.arrayBuffer();
-      const dataArray = arrayBufferToNumberArray(arrayBuf);
+      const formData = new FormData();
+      formData.append("filename", selectedFile.name);
+      formData.append("mime_type", selectedFile.type);
+      formData.append("file", selectedFile);
 
-      const audioFile = new AudioFile({
-        filename: selectedFile.name,
-        id: Date.now(), // Example ID, replace with your logic //NOOOO ID
-        upload_date: new Date().toISOString(),
-        data: dataArray,
-      });
-
-      console.log("AudioFile to upload:", audioFile);
       const response = await fetch(`${url}/recording`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(audioFile),
+        body: formData,
       });
 
       if (!response.ok) {
@@ -109,8 +79,9 @@
     }
   }
 
-  function playItem(id: number) {
-    console.log("Playing recording with id: " + id);
+  function deleteRec(id: number) {
+    recordings = recordings.filter((rec) => rec.id !== id);
+    console.log("File deleted with id: " + id);
   }
 </script>
 
@@ -120,11 +91,11 @@
       <FileCard
         id={recording.id}
         name={recording.filename}
-        onDelete={() => deleteItem(recording.id)}
-        onPlay={() => playItem(recording.id)}
+        deleteCallBack={deleteRec}
       />
     {/each}
   </div>
+
   <div id="upload">
     <input type="file" bind:value={selectedFile} />
     <button onclick={upload} disabled={selectedFile === null}>Upload </button>
