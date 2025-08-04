@@ -7,7 +7,8 @@
 
   let recordings: MediaFile[] = $state([]);
 
-  let selectedFile: File | null = $state(null);
+  let selectedFiles: any = $state([]);
+  let selectedFile = $derived(selectedFiles[0]);
   $inspect("selectedFile:", selectedFile);
 
   onMount(async () => {
@@ -36,17 +37,18 @@
 
   async function upload() {
     try {
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+
       const response = await fetch("http://localhost:8080/recording", {
         method: "POST",
-        headers: {
-          "Content-Type": selectedFile!.type,
-          "File-Name": selectedFile!.name,
-          "Upload-Date": new Date().toISOString(),
-        },
-        body: selectedFile,
+        body: formData,
       });
 
-      if (!response.ok) throw new Error(`Upload failed: ${response.status}`);
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Error ${response.status}: ${errorText}`);
+      }
 
       console.log("Upload successful:", await response.text());
     } catch (err) {
@@ -73,8 +75,10 @@
   </div>
 
   <div id="upload">
-    <input type="file" bind:value={selectedFile} />
-    <button onclick={upload} disabled={selectedFile === null}>Upload </button>
+    <input type="file" bind:value={selectedFile} accept=".wav" />
+    <button onclick={upload} disabled={selectedFile === undefined}>
+      Upload
+    </button>
   </div>
 </div>
 
