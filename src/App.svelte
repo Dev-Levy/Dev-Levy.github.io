@@ -1,13 +1,20 @@
 <script lang="ts">
-  import UploadsZone from "./lib/UploadsZone.svelte";
-  import ExportZone from "./lib/ExportZone.svelte";
+  import { MediaFile, PDF_DTO } from "./lib/Models";
+  let pdf: PDF_DTO = $state(new PDF_DTO("name.pdf", new Blob()));
+  $inspect(pdf, pdf.filename);
+  import Uploads from "./lib/Uploads.svelte";
+  import Export from "./lib/Export.svelte";
+
+  function storePdf(createdPdf: PDF_DTO) {
+    pdf = createdPdf;
+  }
 </script>
 
 <h1>Sheet Music Maker</h1>
 <h2>Work in progress...</h2>
 <main>
-  <UploadsZone />
-  <ExportZone />
+  <Uploads {storePdf} />
+  <Export {pdf} />
 </main>
 
 <style>

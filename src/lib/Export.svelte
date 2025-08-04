@@ -1,21 +1,23 @@
-<script>
-  const url = "http://localhost:8080/";
+<script lang="ts">
+  import { PDF_DTO } from "./Models";
+  const { pdf }: { pdf: PDF_DTO | null } = $props();
 
-  async function download() {
-    console.log("dowloading PDF!");
+  function download() {
+    if (pdf) {
+      const url = window.URL.createObjectURL(pdf.data);
 
-    try {
-      const response = await fetch(url.concat("recording/1"), {
-        method: "GET",
-      });
-      if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
-      }
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = pdf.filename;
+      document.body.appendChild(a);
+      a.click();
 
-      const json = await response.json();
-      console.log(json);
-    } catch (error) {
-      console.error(error.message);
+      a.remove();
+      window.URL.revokeObjectURL(url);
+
+      console.log("downloading PDF!");
+    } else {
+      alert("No PDF to download!");
     }
   }
 </script>
@@ -27,7 +29,7 @@
     </dir>
   </div>
   <div id="download">
-    <button onclick={download}>Download</button>
+    <button onclick={download} disabled={pdf === null}>Download</button>
   </div>
 </div>
 
