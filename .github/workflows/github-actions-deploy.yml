@@ -29,9 +29,11 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+        working-directory: sheet_music_maker
 
       - name: Build
         run: npm run build
+        working-directory: sheet_music_maker
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
