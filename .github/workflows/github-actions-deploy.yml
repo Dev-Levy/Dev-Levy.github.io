@@ -26,6 +26,7 @@ jobs:
         with:
           node-version: 18
           cache: "npm"
+          cache-dependency-path: sheet_music_maker/package-lock.json
 
       - name: Install dependencies
         run: npm ci
