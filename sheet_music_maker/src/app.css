@@ -20,6 +20,9 @@
     --color-pastel-green: rgba(163, 177, 138, 0.44);
     --color-light-green: rgba(88, 129, 87, 0.45);
     --color-dark: #2e2e2e;
+
+    --color-success: green;
+    --color-error: red;
 }
 
 a {

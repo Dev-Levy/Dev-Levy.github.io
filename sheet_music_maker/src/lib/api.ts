@@ -1,6 +1,11 @@
 const API_BASE: string = 'http://localhost:8080';
 const FILE_CONTROLLER:string = 'MediaFile';
 
+export async function fetchBackendHealth() {
+    const res = await fetch(`${API_BASE}/health`);
+    return res.ok;
+}
+
 export async function fetchAudioFiles() {
     const res = await fetch(`${API_BASE}/${FILE_CONTROLLER}/audio`);
 

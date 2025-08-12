@@ -3,7 +3,7 @@
     import {AudioFile} from "../lib/models.js";
     import {fetchAudioFiles, uploadAudioFile} from "../lib/api.js";
     import AudioCard from "./AudioCard.svelte";
-    const {storePdfCallBack}: {storePdfCallBack : Function} = $props();
+    const {status, storePdfCallBack}: {status:string,storePdfCallBack : Function} = $props();
 
     let recordings: AudioFile[] = $state([]);
 
@@ -12,7 +12,14 @@
     let fileInput: HTMLInputElement | null = null;
 
     $effect(() => {if (selectedFiles) selectedFile = selectedFiles[0]});
-
+    $effect(() => {
+       if (status === "UP") {
+           loadAudioFiles()
+       }
+       else if (status === "DOWN") {
+           recordings = [];
+       }
+    });
     $inspect("selected",selectedFile);
 
     onMount(loadAudioFiles)

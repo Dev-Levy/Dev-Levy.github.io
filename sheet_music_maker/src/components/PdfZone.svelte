@@ -1,6 +1,6 @@
 <script lang="ts">
     import {PdfDTO} from "../lib/models";
-    const {pdf}: {pdf : PdfDTO | null} = $props();
+    const {status, pdf}: {status:string,pdf : PdfDTO | null} = $props();
     let pdfUrl: string | null = $state(null);
 
     $effect(() => {
@@ -8,6 +8,11 @@
             pdfUrl = URL.createObjectURL(pdf.blob)
         }
     })
+    $effect(() => {
+        if (status === "DOWN") {
+            pdfUrl = null;
+        }
+    });
 </script>
 
 <div class="PdfZone">
