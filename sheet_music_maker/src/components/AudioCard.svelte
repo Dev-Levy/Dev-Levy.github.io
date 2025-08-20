@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {Music, Play, Pause, Trash} from "lucide-svelte";
+    import {Music, Play, Square, Trash} from "lucide-svelte";
     import {fetchAudioFile, deleteAudioFile, analyzeAudioFile} from "../lib/api";
     import {PdfDTO} from "../lib/models";
 
@@ -83,7 +83,7 @@
     </button>
     {:else}
         <button onclick={() => audio?.pause()}>
-            <Pause/>
+            <Square/>
         </button>
     {/if}
     <button onclick={deleteItem}>
