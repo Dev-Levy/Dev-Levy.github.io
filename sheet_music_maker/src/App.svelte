@@ -23,7 +23,7 @@
 
     let serverStatus:string = $state("DOWN");
     let intervalId: ReturnType<typeof setInterval>;
-    let isSetting:boolean = $state(true);
+    let isSetting:boolean = $state(false);
     let isLoading: boolean = $state(false);
 
     let fileIdReturned: number = $state(0);
@@ -108,7 +108,8 @@
         }
     }
     function cancellation(): void {
-
+        isLoading = false;
+        isSetting = false;
     }
 
     async function checkBackend() {

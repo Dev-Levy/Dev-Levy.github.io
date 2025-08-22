@@ -20,9 +20,9 @@
 <div class="settings_container">
     <label for="bpm">BPM</label>
     <input id="bpm" type="number" bind:value={BPM}/>
-    <label for="beats">Time signature</label>
-    <input id="beats" type="number" bind:value={beats}>
-    <input id="beatType" type="number" bind:value={beatType}>
+    <!--    <label for="beats">Time signature</label>-->
+    <!--    <input id="beats" type="number" bind:value={beats}>-->
+    <!--    <input id="beatType" type="number" bind:value={beatType}>-->
     <div class="settings_option">
         <button id="bpm" onclick={()=>analyzeCallBack(audioInfo)}>Analyze</button>
         <button id="bpm" onclick={()=>cancellationCallBack()}>Cancel</button>
@@ -32,7 +32,7 @@
 <style>
     .settings_container {
         display: flex;
-        width: 100%;
+        width: 60%;
         flex-direction: column;
     }
 
@@ -40,7 +40,7 @@
         margin: 1rem 0;
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
+        justify-content: space-around;
     }
 
     input {
@@ -50,5 +50,6 @@
 
     button {
         cursor: pointer;
+        padding: 1em 2em;
     }
 </style>
