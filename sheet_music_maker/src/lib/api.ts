@@ -1,3 +1,5 @@
+import type {AudioInfo} from "./models";
+
 const API_BASE: string = 'http://localhost:8080';
 const FILE_CONTROLLER:string = 'MediaFile';
 
@@ -47,9 +49,13 @@ export async function deleteAudioFile(id: number) {
     if (!res.ok) throw new Error('Failed to delete file');
 }
 
-export async function analyzeAudioFile(id: number) {
-    const res = await fetch(`${API_BASE}/${FILE_CONTROLLER}/analyze/${id}`, {
-        method: 'GET',
+export async function analyzeAudioFile(audioInfo: AudioInfo) {
+    const res = await fetch(`${API_BASE}/${FILE_CONTROLLER}/analyze`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"  // ✅ tell backend it's JSON
+        },
+        body: JSON.stringify(audioInfo)
     });
 
     if (!res.ok) throw new Error('Failed to analyze file');

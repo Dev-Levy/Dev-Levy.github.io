@@ -6,6 +6,15 @@ export class AudioFile {
     ) {}
 }
 
+export class AudioInfo {
+    constructor(
+        public id: number,
+        public bpm: number,
+        public beats: number,
+        public beatType: number,
+    ) {}
+}
+
 export class PdfDTO {
     constructor(
         public filename: string,

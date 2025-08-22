@@ -15,7 +15,7 @@
 
     --color-primary: #3a5a40;
     --color-secondary: #344e41;
-    --color-accent: #dad7cd;
+    --color-accent: rgb(218, 215, 205);
 
     --color-pastel-green: rgba(163, 177, 138, 0.44);
     --color-light-green: rgba(88, 129, 87, 0.45);
@@ -43,7 +43,8 @@ body {
     min-width: 320px;
     min-height: 100vh;
     background-color: var(--color-secondary);
-    overflow-x: hidden;
+    overflow-x: scroll;
+    overflow-y: hidden;
 }
 
 h1 {
@@ -57,10 +58,9 @@ h1 {
 
 #app {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
-    align-items: center;
-    width: 100%;
+    width: 100vw;
 }
 
 button {

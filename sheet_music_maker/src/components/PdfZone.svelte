@@ -2,6 +2,7 @@
     import {PdfDTO} from "../lib/models";
     const {status, pdf}: {status:string,pdf : PdfDTO | null} = $props();
     let pdfUrl: string | null = $state(null);
+    let xml:Blob | null = $state(null);
 
     $effect(() => {
         if (pdf && pdf.blob){
@@ -13,6 +14,7 @@
             pdfUrl = null;
         }
     });
+
 </script>
 
 <div class="PdfZone">
@@ -38,7 +40,6 @@
         flex-direction: column;
         align-items: center;
         height: 100%;
-        width: 40%;
         margin: 2em
     }
 

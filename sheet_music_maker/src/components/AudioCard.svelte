@@ -1,36 +1,29 @@
 <script lang="ts">
     import {Music, Play, Square, Trash} from "lucide-svelte";
-    import {fetchAudioFile, deleteAudioFile, analyzeAudioFile} from "../lib/api";
-    import {PdfDTO} from "../lib/models";
+    import {fetchAudioFile, deleteAudioFile} from "../lib/api";
 
     const {
-        id,
+        fileId,
         name,
+        isLoading,
+
         deleteCallBack,
-        storePdfCallBack
+        analyzeCallBack,
     }: {
-        id: number;
+        fileId: number;
         name: string,
-        storePdfCallBack:Function,
-        deleteCallBack: Function
+        isLoading: boolean,
+
+        deleteCallBack: Function,
+        analyzeCallBack: Function,
     } = $props();
 
     let audio: HTMLAudioElement | null = null;
     let isPlaying: boolean = $state(false);
 
-    async function analyzeItem() {
-        try {
-            const res = await analyzeAudioFile(id);
-            let pdf:PdfDTO = new PdfDTO(res.filename, res.blob);
-            storePdfCallBack(pdf);
-        } catch (error) {
-            console.error("Fetch error (analyze):", error);
-        }
-    }
-
     async function playItem() {
         try {
-            let dataBlob = await fetchAudioFile(id);
+            let dataBlob = await fetchAudioFile(fileId);
             if (dataBlob) {
                 const blobUrl = URL.createObjectURL(dataBlob);
                 if (audio) {
@@ -44,7 +37,7 @@
                 audio.addEventListener("ended", () => isPlaying = false);
 
                 audio.play().catch((e) => console.error("Playback error:", e));
-                console.log("Playing recording with id: " + id);
+                console.log("Playing recording with id: " + fileId);
             } else {
                 console.warn("No file provided to play.");
             }
@@ -55,9 +48,9 @@
 
     async function deleteItem() {
         try {
-            await deleteAudioFile(id);
+            await deleteAudioFile(fileId);
             deleteAudio();
-            deleteCallBack(id);
+            deleteCallBack(fileId);
         } catch (error) {
             console.error("Fetch error (delete):", error);
         }
@@ -74,13 +67,13 @@
 
 <div id="card">
     <span id="name">{name}</span>
-    <button onclick={analyzeItem}>
+    <button onclick={()=>analyzeCallBack(fileId)} disabled={isLoading}>
         <Music/>
     </button>
     {#if !isPlaying}
-    <button onclick={playItem}>
-        <Play/>
-    </button>
+        <button onclick={playItem}>
+            <Play/>
+        </button>
     {:else}
         <button onclick={() => audio?.pause()}>
             <Square/>
