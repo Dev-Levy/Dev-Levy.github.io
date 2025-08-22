@@ -31,11 +31,8 @@
 
     //region runes
 
-    $inspect("selectedFiles", selectedFiles)
-
     $effect(() => {
         if (selectedFiles) selectedFile = selectedFiles[0]
-        console.log("selectedFiles", selectedFiles);
     });
     $effect(() => {
         if (serverStatus === "UP") {
