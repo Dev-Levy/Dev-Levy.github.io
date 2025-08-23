@@ -159,7 +159,7 @@
         justify-content: start;
         align-items: start;
         border-right: 2px solid var(--color-accent);
-        margin: 2rem;
+        padding: 2rem;
         width: 50%;
         height: 80%;
     }
