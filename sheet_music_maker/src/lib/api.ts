@@ -1,7 +1,7 @@
 import type {AudioInfo} from "./models";
 
 const API_BASE: string = 'http://localhost:8080';
-const FILE_CONTROLLER:string = 'MediaFile';
+const FILE_CONTROLLER: string = 'MediaFile';
 
 export async function fetchBackendHealth() {
     const res = await fetch(`${API_BASE}/health`);
@@ -59,10 +59,10 @@ export async function analyzeAudioFile(audioInfo: AudioInfo) {
     });
 
     if (!res.ok) throw new Error('Failed to analyze file');
-    const blob:Blob = await res.blob();
+    const blob: Blob = await res.blob();
     const filename: string = extractFileNameFromContentDisposition(res);
 
-    return { blob, filename };
+    return {blob, filename};
 }
 
 function extractFileNameFromContentDisposition(res: Response) {
@@ -74,7 +74,7 @@ function extractFileNameFromContentDisposition(res: Response) {
     if (filename?.startsWith('"') && filename.endsWith('"')) {
         filename = filename.slice(1, -1);
     }
-    if (filename === undefined){
+    if (filename === undefined) {
         filename = "NO_FILENAME";
     }
     return filename;

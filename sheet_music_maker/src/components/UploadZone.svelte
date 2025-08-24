@@ -32,6 +32,7 @@
 
     function upload() {
         uploadCallBack();
+        selectedFiles = null;
         if (fileInput)
             fileInput.value = "";   // Clears the file input UI
     }

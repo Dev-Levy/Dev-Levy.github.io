@@ -33,12 +33,16 @@
 
     $effect(() => {
         if (selectedFiles) selectedFile = selectedFiles[0]
-    });
+    }); //setting selectedFile
     $effect(() => {
         if (serverStatus === "UP") {
             loadAudioFiles()
         } else if (serverStatus === "DOWN") {
             recordings = [];
+            selectedFiles = null;
+            selectedFile = null;
+            isSetting = false;
+            isLoading = false;
         }
     }); //server status
     $inspect("pdf",pdf);
