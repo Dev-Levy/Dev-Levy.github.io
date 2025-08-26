@@ -72,7 +72,7 @@
 <div id="card" style=" box-shadow: 3px 3px 5px {loadedFileId === fileId ? 'var(--color-accent)' : 'none'}">
     <span id="name">{name}</span>
     <div id="buttons">
-        <button onclick={()=>analyzeCallBack(fileId)} disabled={isLoading || loadedFileId === fileId}>
+        <button onclick={()=>analyzeCallBack(fileId)} disabled={isLoading}>
             <Music/>
         </button>
         {#if !isPlaying}
