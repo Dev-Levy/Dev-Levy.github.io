@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount, onDestroy } from "svelte";
-    import {analyzeAudioFile, fetchAudioFiles, fetchBackendHealth, uploadAudioFile} from "./lib/api";
+    import {analyzeAudioFile, fetchAudioFiles, fetchBackendHealth, fetchXmlFile, uploadAudioFile} from "./lib/api";
     import AnalyzerSettings from "./components/AnalyzerSettings.svelte";
     import UploadZone from "./components/UploadZone.svelte";
     import PdfZone from "./components/PdfZone.svelte";
@@ -26,6 +26,7 @@
     let isSetting:boolean = $state(false);
     let isLoading: boolean = $state(false);
 
+    let loadedFileId: number = $state(0);
     let fileIdReturned: number = $state(0);
     //endregion
 
@@ -102,6 +103,7 @@
             pdf = new PdfDTO(res.filename, res.blob);
 
             isSetting = false;
+            loadedFileId = audioInfo.id;
         } catch (error) {
             console.error("Fetch error (analyze):", error);
             isLoading = false;
@@ -112,7 +114,20 @@
         isLoading = false;
         isSetting = false;
     }
+    async function  downloadXML(id:number){
+        console.log("Download XML:", id);
+        let rec:AudioFile | undefined = recordings.find(rec=>rec.id === id);
 
+        const blob: Blob = await fetchXmlFile(id);
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = rec === undefined ? "SheetMusic.musicxml" : changeFileExtension(rec.filename, ".musicxml");
+        a.click();
+
+        URL.revokeObjectURL(url);
+    }
     async function checkBackend() {
         try {
             if (await fetchBackendHealth())
@@ -120,6 +135,17 @@
         } catch {
             serverStatus = "DOWN";
         }
+    }
+
+    //endregion
+
+    //region helper functions
+
+    function changeFileExtension(filename: string, newExt: string): string {
+        const lastDot = filename.lastIndexOf(".");
+        return lastDot === -1
+            ? filename + newExt
+            : filename.substring(0, lastDot) + newExt;
     }
 
     //endregion
@@ -140,10 +166,12 @@
     <UploadZone
             {recordings}
             {isLoading}
+            {loadedFileId}
             setSelectedFilesCallBack={setSelectedFiles}
             deleteCallBack={deleteFromList}
             uploadCallBack={upload}
-            analyzeCallBack={showAnalyzeSettings}/>
+            analyzeCallBack={showAnalyzeSettings}
+            downloadXMLCallBack ={downloadXML}/>
     <PdfZone status={serverStatus} pdf={pdf}/>
 </main>
 

@@ -1,21 +1,25 @@
 <script lang="ts">
-    import {Music, Play, Square, Trash} from "lucide-svelte";
+    import {Music, Play, Square, Trash, ArrowDownToLine} from "lucide-svelte";
     import {fetchAudioFile, deleteAudioFile} from "../lib/api";
 
     const {
         fileId,
         name,
         isLoading,
+        loadedFileId,
 
         deleteCallBack,
         analyzeCallBack,
+        downloadXMLCallBack,
     }: {
         fileId: number;
         name: string,
         isLoading: boolean,
+        loadedFileId: number,
 
         deleteCallBack: Function,
         analyzeCallBack: Function,
+        downloadXMLCallBack: Function,
     } = $props();
 
     let audio: HTMLAudioElement | null = null;
@@ -65,28 +69,35 @@
     }
 </script>
 
-<div id="card">
+<div id="card" style=" box-shadow: 3px 3px 5px {loadedFileId === fileId ? 'var(--color-accent)' : 'none'}">
     <span id="name">{name}</span>
-    <button onclick={()=>analyzeCallBack(fileId)} disabled={isLoading}>
-        <Music/>
-    </button>
-    {#if !isPlaying}
-        <button onclick={playItem}>
-            <Play/>
+    <div id="buttons">
+        <button onclick={()=>analyzeCallBack(fileId)} disabled={isLoading || loadedFileId === fileId}>
+            <Music/>
         </button>
-    {:else}
-        <button onclick={() => audio?.pause()}>
-            <Square/>
+        {#if !isPlaying}
+            <button onclick={playItem}>
+                <Play/>
+            </button>
+        {:else}
+            <button onclick={() => audio?.pause()}>
+                <Square/>
+            </button>
+        {/if}
+        <button onclick={deleteItem}>
+            <Trash/>
         </button>
-    {/if}
-    <button onclick={deleteItem}>
-        <Trash/>
-    </button>
+        <button onclick={()=>downloadXMLCallBack(fileId)} disabled={loadedFileId !== fileId}>
+            <span>XML</span>
+            <ArrowDownToLine/>
+        </button>
+    </div>
 </div>
 
 <style>
     #card {
         display: flex;
+        flex-direction: column;
         align-items: center;
         border-radius: 5px;
         background-color: var(--color-primary);
@@ -97,9 +108,24 @@
     #name {
         font-weight: bold;
         width: 100%;
+        margin-bottom: 1em;
+    }
+
+    #buttons {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
     }
 
     button {
         margin: 0.2em;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        span {
+            margin-right: 0.5em;
+        }
     }
 </style>

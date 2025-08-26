@@ -22,7 +22,7 @@ export async function fetchAudioFile(id: number) {
     const res = await fetch(`${API_BASE}/${FILE_CONTROLLER}/audio/${id}`);
 
     if (!res.ok) {
-        throw new Error('Failed to fetch audio files');
+        throw new Error('Failed to fetch audio file');
     }
 
     return await res.blob();
@@ -63,6 +63,16 @@ export async function analyzeAudioFile(audioInfo: AudioInfo) {
     const filename: string = extractFileNameFromContentDisposition(res);
 
     return {blob, filename};
+}
+
+export async function fetchXmlFile(id: number) {
+    const res = await fetch(`${API_BASE}/${FILE_CONTROLLER}/xml/${id}`);
+
+    if (!res.ok) {
+        throw new Error('Failed to fetch xml file');
+    }
+
+    return await res.blob();
 }
 
 function extractFileNameFromContentDisposition(res: Response) {

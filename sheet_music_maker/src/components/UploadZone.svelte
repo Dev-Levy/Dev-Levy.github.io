@@ -7,19 +7,23 @@
     let {
         recordings,
         isLoading,
+        loadedFileId,
 
         setSelectedFilesCallBack,
         deleteCallBack,
         uploadCallBack,
         analyzeCallBack,
+        downloadXMLCallBack
     }: {
         recordings: AudioFile[],
         isLoading: boolean,
+        loadedFileId: number,
 
         setSelectedFilesCallBack: Function,
         deleteCallBack: Function,
         uploadCallBack: Function,
         analyzeCallBack: Function,
+        downloadXMLCallBack: Function,
     } = $props();
 
     let fileInput: HTMLInputElement | null = null;
@@ -43,7 +47,15 @@
     <h2>Uploaded recordings</h2>
 
     <div id="upload">
-        <input type="file" bind:files={selectedFiles} bind:this={fileInput}/>
+        <label class="upload_button" for="upload_input">Select file</label>
+        <input id="upload_input" type="file" bind:files={selectedFiles} bind:this={fileInput} style="display: none"/>
+
+        {#if selectedFiles && selectedFiles.length > 0}
+            <span class="file_name">{selectedFiles[0].name}</span>
+        {:else}
+            <span class="file_name">No file selected</span>
+        {/if}
+
         <button onclick={upload} disabled={selectedFiles === null}>Upload</button>
     </div>
 
@@ -52,9 +64,11 @@
             <AudioCard
                     fileId={recording.id}
                     name={recording.filename}
+                    {isLoading}
+                    {loadedFileId}
                     {deleteCallBack}
                     {analyzeCallBack}
-                    {isLoading}/>
+                    {downloadXMLCallBack}/>
         {/each}
     </div>
 </div>
@@ -87,6 +101,27 @@
         border-radius: 5px;
         border: 2px solid var(--color-accent);
 
+    }
+
+    .upload_button {
+        border-radius: 8px;
+        border: 1px solid transparent;
+        padding: 0.6em 1.2em;
+        font-size: 1em;
+        font-weight: 500;
+        font-family: inherit;
+        background-color: #1a1a1a;
+        cursor: pointer;
+        transition: border-color 0.25s;
+    }
+
+    .upload_button:hover {
+        border-color: #646cff;
+    }
+
+    .file_name {
+        margin: 0 1em;
+        font-weight: bold;
     }
 
     #list-items {
