@@ -8,6 +8,7 @@
         recordings,
         isLoading,
         loadedFileId,
+        serverStatus,
 
         setSelectedFilesCallBack,
         deleteCallBack,
@@ -18,6 +19,7 @@
         recordings: AudioFile[],
         isLoading: boolean,
         loadedFileId: number,
+        serverStatus: string,
 
         setSelectedFilesCallBack: Function,
         deleteCallBack: Function,
@@ -48,7 +50,13 @@
 
     <div id="upload">
         <label class="upload_button" for="upload_input">Select file</label>
-        <input id="upload_input" type="file" bind:files={selectedFiles} bind:this={fileInput} style="display: none"/>
+        <input
+                id="upload_input"
+                type="file"
+                accept=".wav,.mp3,.ogg"
+                bind:files={selectedFiles}
+                bind:this={fileInput}
+                style="display: none"/>
 
         {#if selectedFiles && selectedFiles.length > 0}
             <span class="file_name">{selectedFiles[0].name}</span>
@@ -56,7 +64,7 @@
             <span class="file_name">No file selected</span>
         {/if}
 
-        <button onclick={upload} disabled={selectedFiles === null}>Upload</button>
+        <button onclick={upload} disabled={selectedFiles === null || serverStatus === 'DOWN'}>Upload</button>
     </div>
 
     <div id="list-items">

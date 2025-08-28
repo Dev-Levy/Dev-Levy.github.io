@@ -167,6 +167,7 @@
             {recordings}
             {isLoading}
             {loadedFileId}
+            {serverStatus}
             setSelectedFilesCallBack={setSelectedFiles}
             deleteCallBack={deleteFromList}
             uploadCallBack={upload}
