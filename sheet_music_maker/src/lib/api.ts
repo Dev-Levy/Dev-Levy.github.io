@@ -1,6 +1,6 @@
 import type {AudioInfo} from "./models";
 
-const API_BASE: string = 'http://localhost:8080';
+const API_BASE: string = 'https://localhost:8080';
 const FILE_CONTROLLER: string = 'MediaFile';
 
 export async function fetchBackendHealth() {
