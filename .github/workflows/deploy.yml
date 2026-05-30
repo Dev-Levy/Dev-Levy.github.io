@@ -37,6 +37,11 @@ jobs:
       # This step builds a native, full-screen HTML file wrapping your markdown
       - name: Convert Markdown to Full-Screen GitHub Dark Page
         run: |
+
+          if [ -f "assets/OL.ico" ]; then
+            cp assets/OL.ico _site/
+          fi
+
           cat << 'EOF' > _site/index.html
           <!DOCTYPE html>
           <html lang="en">
@@ -44,6 +49,7 @@ jobs:
               <meta charset="UTF-8">
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
               <title>Levy page</title>
+              <link rel="icon" type="image/x-icon" href="OL.ico">
               <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.1/github-markdown-dark.min.css">
               <style>
                   html, body {
