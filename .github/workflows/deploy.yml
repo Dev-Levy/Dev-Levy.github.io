@@ -36,7 +36,8 @@ jobs:
           pandoc index.md -s -o _site/index.html \
             --metadata title="PORTFOLIO" \
             -c "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.1/github-markdown.min.css" \
-            --include-in-header=<(echo '<style>body { box-sizing: border-box; min-width: 200px; max-width: 980px; margin: 0 auto; padding: 45px; } .markdown-body { background-color: transparent; }</style>') \
+            -c "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.1/github-markdown-light.min.css" \
+            --include-in-header=<(echo '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.1/github-markdown-dark.min.css" media="(prefers-color-scheme: dark)"><style>html, body { background-color: var(--color-canvas-default, #ffffff); margin: 0; padding: 0; } body { box-sizing: border-box; min-width: 200px; max-width: 980px; margin: 0 auto; padding: 45px; }</style>') \
             --include-before-body=<(echo '<div class="markdown-body">') \
             --include-after-body=<(echo '</div>')
 
