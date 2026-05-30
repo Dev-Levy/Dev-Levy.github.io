@@ -31,15 +31,54 @@ jobs:
       - name: Install Pandoc
         run: sudo apt-get update && sudo apt-get install -y pandoc
 
-      - name: Convert Markdown to HTML with GitHub Style
+      # This step builds a native, full-screen HTML file wrapping your markdown
+      - name: Convert Markdown to Full-Screen GitHub Dark Page
         run: |
-          pandoc index.md -s -o _site/index.html \
-            --metadata title="PORTFOLIO" \
-            -c "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.1/github-markdown.min.css" \
-            -c "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.1/github-markdown-light.min.css" \
-            --include-in-header=<(echo '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.1/github-markdown-dark.min.css" media="(prefers-color-scheme: dark)"><style>html, body { background-color: var(--color-canvas-default, #ffffff); margin: 0; padding: 0; } body { box-sizing: border-box; min-width: 200px; max-width: 980px; margin: 0 auto; padding: 45px; }</style>') \
-            --include-before-body=<(echo '<div class="markdown-body">') \
-            --include-after-body=<(echo '</div>')
+          cat << 'EOF' > _site/index.html
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Levy page</title>
+              <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.1/github-markdown-dark.min.css">
+              <style>
+                  html, body {
+                      background-color: #0d1117 !important; 
+                      margin: 0;
+                      padding: 0;
+                      min-height: 100vh;
+                      width: 100%;
+                      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+                  }
+                  .container {
+                      box-sizing: border-box;
+                      min-width: 200px;
+                      max-width: 980px;
+                      margin: 0 auto;
+                      padding: 45px 20px;
+                  }
+                  .markdown-body {
+                      background-color: #0d1117 !important;
+                  }
+              </style>
+          </head>
+          <body>
+              <div class="container">
+                  <article class="markdown-body">
+
+                  EOF
+                  pandoc index.md >> _site/index.html
+                  cat << 'EOF' >> _site/index.html
+
+                  </article>
+              </div>
+          </body>
+          </html>
+          EOF
+
+          # Note: If your markdown file is named README.md instead of index.md, 
+          # just change "pandoc index.md" to "pandoc README.md" in the script above.
 
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
